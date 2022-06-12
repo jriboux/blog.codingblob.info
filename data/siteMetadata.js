@@ -3,14 +3,14 @@ const siteMetadata = {
   author: 'Jonathan Riboux',
   headerTitle: 'Codingblob',
   description: 'Blog technique de Jonathan Riboux',
-  language: 'en-us',
+  language: 'fr-fr',
   theme: 'dark', // system, dark or light
-  siteUrl: 'https://tailwind-nextjs-starter-blog.vercel.app',
-  siteRepo: 'https://github.com/timlrx/tailwind-nextjs-starter-blog',
+  siteUrl: 'https://blog.codingblob.info',
+  siteRepo: '',
   siteLogo: '/static/images/logo.svg',
   image: '/static/images/avatar.svg',
   socialBanner: '/static/images/twitter-card.png',
-  email: 'address@yoursite.com',
+  email: '',
   github: 'https://github.com/jriboux',
   twitter: null,
   facebook: null,
@@ -36,7 +36,7 @@ const siteMetadata = {
     // content security policy in the `next.config.js` file.
     // Select a provider and use the environment variables associated to it
     // https://vercel.com/docs/environment-variables
-    provider: 'giscus', // supported providers: giscus, utterances, disqus
+    provider: '', // supported providers: giscus, utterances, disqus
     giscusConfig: {
       // Visit the link below, and follow the steps in the 'configuration' section
       // https://giscus.app/
