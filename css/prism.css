@@ -7,8 +7,8 @@ pre[class*='language-'] {
   word-wrap: normal;
   color: #eee;
   background: #2f2f2f;
-  font-family: Roboto Mono, monospace;
-  font-size: 1em;
+  font-family: Victor Mono, monospace;
+  font-size: 1.1em;
   line-height: 1.5em;
 
   -moz-tab-size: 4;
@@ -19,6 +19,8 @@ pre[class*='language-'] {
   -moz-hyphens: none;
   -ms-hyphens: none;
   hyphens: none;
+
+  font-weight: 500;
 }
 
 code[class*='language-']::-moz-selection,
@@ -64,6 +66,7 @@ pre[class*='language-'] {
 
 .token.attr-name {
   color: #ffcb6b;
+  font-style: italic;
 }
 
 .token.attr-value {
@@ -120,6 +123,7 @@ pre[class*='language-'] {
 
 .token.function {
   color: #c792ea;
+  font-style: italic;
 }
 
 .token.hexcode {
@@ -142,6 +146,7 @@ pre[class*='language-'] {
 
 .token.keyword {
   color: #c792ea;
+  font-style: italic;
 }
 
 .token.number {
