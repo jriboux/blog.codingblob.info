@@ -20,7 +20,17 @@ jobs:
     - run: |
         npm install
         npm run export
-    - uses: actions/upload-artifact@v3
-      with:
-        name: export-artifact
-        path: out/
+#     - uses: actions/upload-artifact@v3
+#       with:
+#         name: export-artifact
+#         path: out/
+    - name: Deploy to Server
+      uses: easingthemes/ssh-deploy@main
+      env:
+          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
+          ARGS: "-rltgoDzvO"
+          SOURCE: "out/"
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_PORT: ${{ secrets.REMOTE_PORT }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          TARGET: ${{ secrets.REMOTE_TARGET }}
