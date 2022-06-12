@@ -1,0 +1,50 @@
+---
+title: Nettoyer les snaps désativés sur Ubuntu
+date: 2020-06-05 10:09:35
+tags: [snap]
+---
+
+## Lister les snaps installés
+
+```shell script
+snap list --all
+```
+
+Sortie :
+
+```shell script
+Nom                   Version                     Révision  Suivi            Éditeur     Notes
+core                  16-2.45                     9289      latest/stable    canonical✓  core
+core                  16-2.44.3                   9066      latest/stable    canonical✓  core,désactivé
+core18                20200427                    1754      latest/stable    canonical✓  base
+gnome-3-26-1604       3.26.0.20200529             100       latest/stable/…  canonical✓  -
+gnome-3-26-1604       3.26.0.20191114             98        latest/stable/…  canonical✓  désactivé
+gnome-3-28-1804       3.28.0-16-g27c9498.27c9498  116       latest/stable    canonical✓  -
+gnome-3-34-1804       0+git.3009fc7               33        latest/stable/…  canonical✓  -
+gnome-system-monitor  3.36.0-12-g35f88a56d7       145       latest/stable/…  canonical✓  désactivé
+gnome-system-monitor  3.36.0-12-g35f88a56d7       148       latest/stable/…  canonical✓  -
+gtk-common-themes     0.1-36-gc75f853             1506      latest/stable/…  canonical✓  -
+skype                 8.60.0.76                   128       latest/stable    skype✓      classic
+snap-store            3.36.0-80-g208fd61          454       latest/stable/…  canonical✓  -
+spotify               1.1.26.501.gbe11e53b-15     41        latest/stable    spotify✓    -
+```
+
+## Consommation d'espace disque des snaps
+
+**Consommation totale**
+
+```shell script
+du -hs /var/lib/snapd/snaps
+```
+
+**Consommation par snap**
+
+```shell script
+du -h /var/lib/snapd/snaps/*.snap | sort -h
+```
+
+## Suppression de tous les snaps désactivés
+
+```shell script
+snap list --all | awk 'BEGIN {} ; /désactivé|disabled/ {print "snap remove "$1" --revision "$3""} ; END {exit 0}' | sudo /bin/sh
+```

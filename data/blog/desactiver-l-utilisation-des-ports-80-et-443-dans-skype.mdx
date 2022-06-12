@@ -1,0 +1,25 @@
+---
+title: Désactiver l'utilisation des ports 80 et 443 dans Skype
+featured_image: /images/2017/10/skype.png
+date: 2017-04-16 14:16:18
+tags: [WAMP, Apache, Nginx, Skype]
+---
+
+Par défaut, Skype a la possibilité d'utiliser les ports 80 et 443 pour ses
+communications.
+
+Cela pose problème sur un poste de développement web dont ces deux ports
+doivent être utilisés par le serveur web (80 pour http et 443 pout l'https).
+
+Si Skype est lancé, il est impossible de lancer tout serveur web configuré
+pour utiliser les ports par défaut (WAMP, Apache, Ngninx ...).
+
+Dans la fenêtre principale de skype, se rendre dans le menu "Outils > Options".
+
+![Configuration avancée](../static/images/2017/05/skype_config_ports.png)
+
+Il faut alors déselectionner l'option "Utiliser les ports 80 et 443 ...",
+enregistrer et redémarrer Skype.
+
+Suite à cette manipulation, Skype ne causera plus de conflit avec votre
+serveur web.

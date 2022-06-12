@@ -1,0 +1,48 @@
+---
+title: Télécharger une liste d'images ou de fichiers depuis un fichier d'urls
+featured_image: /images/2017/10/download.png
+date: 2017-10-21 6:21:36
+tags: [bash, linux, shellscript, sed, wget]
+---
+
+Lors de la migration de sites ou tout simplement pour récupérer un grand nombre de fichiers, il peut être nécessaire de télécharger une liste d'urls.
+
+Ce tutoriel a pour but de vous montrer comment récupérer une liste d'urls contenues dans un fichier.
+
+# Modification des urls relatives en urls absolues
+
+Si votre liste d'urls provient d'une base de données, il se peut que ces dernières soient relatives à la racine de votre site ou à votre dossier static/medias.
+
+Pour préfixer chaque url de votre liste, nous allons utiliser la commande `sed`.
+
+```bash
+sed -i 's#^#http://www.le_site.fr/le_dossier/#' ma_liste.txt
+```
+
+## Explication des paramètres
+
+Le paramètre `-i` permet de modifier directement les fichiers passés en paramètre en fin de commande. Sans quoi le résultat sera affiché sur la sortie standard.
+
+Le paramètre `'s#^#http://www.le_site.fr/le_dossier/#'` permet de rechercher (`s`) tous les débuts de ligne (`^`) et de le préfixer par notre site (`http://www.le_site.fr/le_dossier/`). les `#` sont là pour séparer les paramètres de notre commande sed.
+
+# Téléchargement des urls
+
+Une fois votre liste d'urls complétée, vous pouvez passer au téléchargement.
+
+Pour celà, nous allons utiliser la commande `wget`.
+
+```bash
+wget -x -nH -i ma_liste.txt -P mon_dossier
+```
+
+## Explication des paramètres
+
+Le `-x` permet de conserver l'arborescence des fichiers téléchargés.
+Ainsi, l'url _http://www.mon_site.com/a/b/c/mon_fichier.pdf_ sera téléchargé vers le dossier _www.mon_site.com/a/b/c/mon_fichier.pdf_.
+
+Le `-nH` permet de supprimer le nom de domaine lors du téléchargement.
+Ainsi, l'url _http://www.mon_site.com/a/b/c/mon_fichier.pdf_ sera téléchargé vers le dossier _a/b/c/mon_fichier.pdf_.
+
+Le `-i ma_liste.txt` permet de spécifier le fichier contenant la liste d'urls (une url par ligne).
+
+Le `-P mon_dossier` permet de spécifier le dossier cible qui va accueillir tous les fichiers téléchargés.

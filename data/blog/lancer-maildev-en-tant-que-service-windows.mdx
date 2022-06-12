@@ -1,0 +1,111 @@
+---
+title: Lancer maildev en tant que service Windows
+featured_image: /images/2017/10/maildev.jpg
+date: 2017-06-16 14:16:18
+tags: [maildev, test, développement, service, windows]
+---
+
+# Qu'est-ce que maildev ?
+
+Maildev est un outil permettant de tester les envoies d'emails.
+
+Il intègre un serveur smtp qu'il convient de configurer sur les applications / sites sur lesquels tester les envoies d'emails.
+
+Il intègre également un serveur http et un webmail simplifié permettant de consulter les mails envoyés (quelles qu'en soient les sources et destinations).
+
+# Installer les pré-requis
+
+## Node.js®
+
+Télécharger Node.js pour Windows sur le [site officiel](https://nodejs.org/) (Windows Installer).
+
+Exécuter le fichier MSI téléchargé et suivre les étapes de l'installation (pour les besoins de ce tutoriel, j'ai choisi le dossier _C:\Program Files\nodejs_).
+
+## Maildev
+
+Créer un dossier _C:\maildev_ .
+
+Ouvrir une invite de commande et y taper les commandes suivantes :
+
+```bat
+C:
+cd C:\maildev_service
+npm install maildev
+```
+
+# Créer le service
+
+Il n'est pas possible directement dans Windows de créer un service à partir d'un exécutable.
+
+Nous allons donc avoir besoin d'un outil pour celà, à savoir WinSW ([github](https://github.com/kohsuke/winsw)).
+
+Commencer par télécharger la dernière version de WinSW [par ici](http://repo.jenkins-ci.org/releases/com/sun/winsw/winsw/). Seul le fichier _winsw-x.x.x-bin.exe_ nous intéresse.
+
+Copier le fichier _winsw-x.x.x-bin.exe_ dans le dossier _C:\maildev_service_ et le renommer en _maildev-service.exe_.
+
+Créer un fichier de configuration _maildev-service.xml_. Ce fichier doit obligatoirement porter l même nom que l'exécutable de WinSW.
+
+Y saisir le contenu suivant :
+
+```xml
+<service>
+  <id>maildev</id>
+  <name>MailDev</name>
+  <description>Serveur de mail MailDev</description>
+  <executable>C:\Program Files\nodejs\node.exe</executable>
+  <logpath>C:\maildev_service</logpath>
+  <logmode>roll</logmode>
+  <depend></depend>
+  <startargument>C:\maildev_service\node_modules\maildev\bin\maildev</startargument>
+  <startargument>-s</startargument>
+  <startargument>25</startargument>
+  <startargument>-w</startargument>
+  <startargument>1080</startargument>
+</service>
+```
+
+Cette configuration définit un service MailDev dont la commande de démarrage est `C:\maildev_service\node_modules\maildev\bin\maildev -s 25 -w 1080`.
+
+Le paramètre -s 25 permet de définir le port du serveur SMTP (ici 25).
+
+Le paramètre -w 1080 permet de définir le port du serveur HTTP (ici 1080).
+
+Ce paramétrage de maildev est relativement basique mais fait le travail.
+Vous pouvez cependant l'adapter à vos besoins en suivant la [documentation de MailDev](https://github.com/djfarrelly/maildev).
+
+Vous pouvez également adapter la configuration de WinSW à vos besoins en suivant la [documentation de WinSW](https://github.com/kohsuke/winsw/blob/master/doc/xmlConfigFile.md).
+
+# Installer le service
+
+L'exécutable créé précédemment permet la gestion complète du service, y compris son installation.
+
+Pour celà, ouvrir une ligne de commande en **mode administrateur** et exécuter les commandes suivantes :
+
+```bat
+C:
+cd C:\maildev_service
+maildev-service install
+```
+
+# Supprimer le service
+
+Ouvrir une ligne de commande en **mode administrateur** et exécuter les commandes suivantes :
+
+```bat
+C:
+cd C:\maildev_service
+maildev-service uninstall
+```
+
+# Gestion du service
+
+Le service peut être géré depuis l'interface de gestion des services de Windows, mais aussi via l'exécutable maildev-service.
+
+| Méthode              | Vérifier l'état du service | Démarrer le service     | Stopper le service     |
+| -------------------- | -------------------------- | ----------------------- | ---------------------- |
+| Avec maildev-service | `maildev-service status`   | `maildev-service start` | `maildev-service stop` |
+| Avec la commande net |                            | `net start maildev`     | `net stop maildev`     |
+
+Pour consulter la liste des commandes, taper la commande `maildev-service --help`.
+
+**Astuce :** Il est possible d'ajouter le dossier _C:\maildev_service_ dans le PATH pour accéder à la commande maildev-service en ligne de commande depuis n'importe quel dossier.

@@ -1,0 +1,77 @@
+---
+title: Autoriser l'upload des images vectorielles SVG sur Prestashop 1.7
+featured_image: /images/2019/10/svg.png
+date: 2019-10-11 21:04:42
+tags: [prestashop 1.7, prestashop, php]
+summary: Prestashop ne permet pas de base l'upload de fichiers SVG dans les medias.
+---
+
+# Autoriser l'upload des images vectorielles SVG sur Prestashop 1.7
+
+Par défaut, l'upload de fichiers images vectorielles au format SVG ou SVGZ n'est pas possible sur Prestashop 1.7 .
+
+Il n'y a pourtant pas de limitation technique quant à l'utilisation de SVG au sein des contenus CMS de Prestashop.
+
+## Solution de contournement
+
+Pour contourner cela il est déjà possible de déposer manuellement ces fichiers sur le serveur dans le dossier `img/cms` du site via FTP ou SFTP.
+
+Ca fonctionne, mais c'est contraignant, surtout si les contenus CMS de votre site sont gérés par des utilisateurs ayant un faible baguage technique.
+
+## Correction de l'upload des SVG
+
+Il existe un moyen relativement propre d'autoriser l'envoi de fichiers SVG (ou tout autre type de fichier) sur Prestashop 1.7 .
+
+"relativement" car il va falloir modifier un fichier du core de Prestashop, cette partie n'étant pas surchargeable via un module ou un override.
+
+Il faudra donc penser à réappliquer cette modification en cas de mise à jour de Prestashop.
+
+### Autoriser l'extension `.svg`
+
+**Pour cela, il faut éditer le fichier de configuration de l'uploader**
+
+Editez le fichier `[admin]/filemanager/config/config.php` à l'aide de l'éditeur de votre choix.
+
+Repérez la ligne commençant par `$ext_img = ...` aux alentours de la ligne 106. Il s'agit de la liste des extensions des images autorisées.
+
+_Par défaut cette ligne devrait contenir :_
+
+```php
+$ext_img = array('jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'svg');
+```
+
+Les fichiers portant l'extension .svg sont donc déjà autorisés par défaut.
+
+### Autoriser les types mimes `image/svg` et `image/svg+xml`
+
+Editez le fichier `[admin]/filemanager/config/config.php` à l'aide de l'éditeur de votre choix (il s'agit du même fichier que pour les extensions).
+
+En plus des extensions, il faut autoriser les types mimes correspondant aux images vectorielles SVG.
+
+Repérez la ligne commençant par `$mime_img = ...` aux alentours de la ligne 117. Il s'agit de la liste des types mimes des images autorisées.
+
+_Par défaut cette ligne devrait contenir :_
+
+```php
+$mime_img = array('image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/tiff', 'image/svg');
+```
+
+Les images vectorielles SVG sont partiellement autorisées par défaut.<br/>
+Le type mime `image/svg` est bien présent mais il manque `image/svg+xml`.
+
+_Rajoutez-le en fin de liste, vous devriez obtenir :_
+
+```php
+$mime_img = array('image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/tiff', 'image/svg', 'image/svg+xml');
+```
+
+## SVG non reconnus par le navigateur
+
+En fonction de votre serveur HTTP, les images SVG sont reconnus soit par extension (dans ce cas il n'y a pas de problème), soit en fonction du contenu du fichier.
+
+Dans ce deuxième cas de figure, si l'entête xml est absent du fichier SVG, il est possible que le serveur web ne reconnaisse pas le type de fichier et que ce dernier se voit attribuer un type mime 'text/plain'.
+Dans ce cas, il faut paramétrer votre serveur web pour attribuer le type mime 'image/svg' à vos fichiers \*.svg .
+
+## Aller plus loin
+
+Cette technique n'est pas valable uniquement pour les images vectorielles au format SVG, elle est applicable à tout type d'images, vidéos, documents, ...

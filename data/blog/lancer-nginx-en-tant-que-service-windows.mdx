@@ -1,0 +1,103 @@
+---
+title: Lancer Nginx en tant que service Windows
+featured_image: /images/2017/10/nginx.png
+date: 2017-04-11 21:24:18
+tags: [nginx, service, windows]
+---
+
+# Installer Nginx
+
+Si ce n'est pas déjà fait, télécharger Nginx pour Windows sur le [site officiel](http://nginx.org/en/download.html) (nginx/Windows-x.xx.xx).
+
+Extraire l'archive dans le dossier désiré.
+Pour cet article, nous allons utiliser le dossier _C:\nginx_ .
+
+Nginx peut être configuré via le fichier _conf/nginx.conf_ .
+
+# Créer un script d'arrêt
+
+Nginx peut être stoppé en utilisant la commande `nginx -p C:\nginx -s stop`.
+
+Il arrive cependant que cette commande échoue et dans ce cas il faut stopper le processus _nginx.exe_ via la commande `taskkill /IM nginx.exe /F /T`.
+
+- `/IM` spécifie le nom du processus
+- `/F` force l'arrêt du processus
+- `/T` permet de stopper tous les processus fils du processus spécifié par `/IM`
+
+Pour des raisons pratiques, nous allons créer un script permettant d'arrêter à coup sure Nginx.
+
+Pour celà, créer un fichier _C:\nginx\nginx-stop.bat_ avec le contenu suivant :
+
+```bat
+C:\nginx\nginx.exe -p c:\nginx -s stop
+taskkill /IM nginx.exe /F /T
+```
+
+# Créer le service
+
+Il n'est pas possible directement dans Windows de créer un service à partir d'un exécutable.
+
+Nous allons donc avoir besoin d'un outil pour celà, à savoir WinSW ([github](https://github.com/kohsuke/winsw)).
+
+Commencer par télécharger la dernière version de WinSW [par ici](http://repo.jenkins-ci.org/releases/com/sun/winsw/winsw/). Seul le fichier _winsw-x.x.x-bin.exe_ nous intéresse.
+
+Copier le fichier _winsw-x.x.x-bin.exe_ dans le dossier _C:\nginx_ et le renommer en _nginx-service.exe_.
+
+Créer un fichier de configuration _nginx-service.xml_. Ce fichier doit obligatoirement porter le même nom que l'exécutable de WinSW.
+
+Y saisir le contenu suivant :
+
+```xml
+<service>
+  <id>nginx</id>
+  <name>Nginx</name>
+  <description>Serveur web Nginx</description>
+  <executable>c:\nginx\nginx.exe</executable>
+  <logpath>c:\nginx\</logpath>
+  <logmode>roll</logmode>
+  <depend></depend>
+  <startargument>-p</startargument>
+  <startargument>c:\nginx</startargument>
+  <stopexecutable>c:\nginx\nginx-stop.bat</stopexecutable>
+</service>
+```
+
+Cette configuration définit un service Nginx dont la commande de démarrage est `c:\nginx\nginx.exe -p c:\nginx` et la commande d'arrêt, le script _c:\nginx\nginx-stop.bat_ créé précédemment.
+
+Cette configuration est relativement basique mais fait le travail.
+Vous pouvez cependant l'adapter à vos besoins en suivant la [documentation de WinSW](https://github.com/kohsuke/winsw/blob/master/doc/xmlConfigFile.md).
+
+# Installer le service
+
+L'exécutable créé précédemment permet la gestion complète du service, y compris son installation.
+
+Pour celà, ouvrir une ligne de commande en mode administrateur et exécuter les commandes suivantes :
+
+```bat
+C:
+cd C:\nginx
+nginx-service install
+```
+
+# Supprimer le service
+
+Ouvrir une ligne de commande en mode administrateur et exécuter les commandes suivantes :
+
+```bat
+C:
+cd C:\nginx
+nginx-service uninstall
+```
+
+# Gestion du service
+
+Le service peut être géré depuis l'interface de gestion des services de Windows, mais aussi via l'exécutable nginx-service.
+
+| Méthode              | Vérifier l'état du service | Démarrer le service   | Stopper le service   |
+| -------------------- | -------------------------- | --------------------- | -------------------- |
+| Avec nginx-service   | `nginx-service status`     | `nginx-service start` | `nginx-service stop` |
+| Avec la commande net |                            | `net start nginx`     | `net stop nginx`     |
+
+Pour consulter la liste des commandes, taper la commande `nginx-service --help`.
+
+**Astuce :** Il est possible d'ajouter le dossier _C:\nginx_ dans le PATH pour accéder à la commande nginx-service en ligne de commande depuis n'importe quel dossier.

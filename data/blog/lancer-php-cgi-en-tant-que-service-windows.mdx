@@ -1,0 +1,87 @@
+---
+title: Lancer PHP-CGI en tant que service Windows
+featured_image: /images/2017/10/php.png
+date: 2017-04-11 22:29:32
+tags: [php, service, windows]
+---
+
+# Installer PHP
+
+Si ce n'est pas déjà fait, télécharger PHP pour Windows sur le [site officiel](http://windows.php.net/download/).
+
+Pour une utilisation avec Nginx, choisir une version "Non Thread Safe".
+
+Extraire l'archive dans le dossier désiré.
+Pour cet article, nous allons utiliser le dossier _C:\php_ .
+
+PHP peut être configuré via le fichier _C:\php\php.ini_ qu'il va faloir créer à partir des exemples fournis dans l'archive.
+
+# Créer le service
+
+Il n'est pas possible directement dans Windows de créer un service à partir d'un exécutable.
+
+Nous allons donc avoir besoin d'un outil pour celà, à savoir WinSW ([github](https://github.com/kohsuke/winsw)).
+
+Commencer par télécharger la dernière version de WinSW [par ici](http://repo.jenkins-ci.org/releases/com/sun/winsw/winsw/). Seul le fichier _winsw-x.x.x-bin.exe_ nous intéresse.
+
+Copier le fichier _winsw-x.x.x-bin.exe_ dans le dossier _C:\php_ et le renommer en _php-service.exe_.
+
+Créer un fichier de configuration _php-service.xml_. Ce fichier doit obligatoirement porter le même nom que l'exécutable de WinSW.
+
+Y saisir le contenu suivant :
+
+```xml
+<service>
+  <id>php</id>
+  <name>PHP</name>
+  <description>Serveur CGI PHP</description>
+  <executable>c:\php\php-cgi.exe</executable>
+  <logpath>c:\php\</logpath>
+  <logmode>roll</logmode>
+  <depend></depend>
+  <startargument>-b</startargument>
+  <startargument>127.0.0.1:9000</startargument>
+  <startargument>-c</startargument>
+  <startargument>C:\php\php.ini</startargument>
+</service>
+```
+
+Cette configuration définit un service PHP dont la commande de démarrage est `C:\php\php-cgi.exe -b 127.0.0.1:9000 -c C:\php\php.ini`.
+
+Cette configuration est relativement basique mais fait le travail.
+Vous pouvez cependant l'adapter à vos besoins en suivant la [documentation de WinSW](https://github.com/kohsuke/winsw/blob/master/doc/xmlConfigFile.md).
+
+# Installer le service
+
+L'exécutable créé précédemment permet la gestion complète du service, y compris son installation.
+
+Pour celà, ouvrir une ligne de commande en mode administrateur et exécuter les commandes suivantes :
+
+```bat
+C:
+cd C:\php
+php-service install
+```
+
+# Supprimer le service
+
+Ouvrir une ligne de commande en mode administrateur et exécuter les commandes suivantes :
+
+```bat
+C:
+cd C:\php
+php-service uninstall
+```
+
+# Gestion du service
+
+Le service peut être géré depuis l'interface de gestion des services de Windows, mais aussi via l'exécutable php-service.
+
+| Méthode              | Vérifier l'état du service | Démarrer le service | Stopper le service |
+| -------------------- | -------------------------- | ------------------- | ------------------ |
+| Avec php-service     | `php-service status`       | `php-service start` | `php-service stop` |
+| Avec la commande net |                            | `net start php`     | `net stop php`     |
+
+Pour consulter la liste des commandes, taper la commande `php-service --help`.
+
+**Astuce :** Il est possible d'ajouter le dossier _C:\php_ dans le PATH pour accéder à la commande php-service en ligne de commande depuis n'importe quel dossier.

@@ -1,0 +1,31 @@
+---
+title: Supprimer le contenu par défaut de la boutique sur Prestashop 1.7
+featured_image: /images/2017/10/prestashop-1.7.png
+date: 2017-10-11 13:43:02
+tags: [php, prestashop, prestashop 1.7, base de données]
+---
+
+Lors de l'installation de Prestashop 1.7, du contenu d'exemple est créé. La boutique contient alors un catalogue et des
+commandes qu'il va falloir nettoyer avant de créer votre propre contenu.
+
+# Installer le module de nettoyage officiel
+
+Prestashop fournit un module officiel de nettoyage de la boutique.
+
+Il faut l'installer via la page _"Modules > Modules"_ du back office.
+
+Recherchez le module "PrestaShop Cleaner" puis cliquer sur le bouton "installation".
+
+# Nettoyer les données d'exemple
+
+Sur la page du module "Modules > Modules > Modules installés > Nettoyage de PrestaShop" cliquez sur le bouton
+"configurer".
+
+Dans l'encart "Catalogue", validez le message d'avertissement et cliquez sur le bouton "Supprimer le catalogue".
+
+Dans l'encart "Commandes et clients", validez le message d'avertissement et cliquez sur le bouton "Supprimer les
+commandes et clients".
+
+Pour vous assurer de l'intégrité de la base de données, cliquez sur le bouton "Vérifier et réparer".
+
+Pour finir, nettoyez la base de données en cliquant sur le bouton "Nettoyer et optimiser".

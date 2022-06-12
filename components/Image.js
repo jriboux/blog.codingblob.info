@@ -1,6 +1,9 @@
 import NextImage from 'next/image'
 
-// eslint-disable-next-line jsx-a11y/alt-text
-const Image = ({ ...rest }) => <NextImage {...rest} />
+const customLoader = ({ src }) => {
+  return src
+}
 
-export default Image
+export default function Image(props) {
+  return <NextImage {...props} loader={customLoader} />
+}

@@ -7,11 +7,13 @@ import { formatSlug, getAllFilesFrontMatter, getFileBySlug, getFiles } from '@/l
 const DEFAULT_LAYOUT = 'PostLayout'
 
 export async function getStaticPaths() {
+  const allPosts = await getAllFilesFrontMatter('blog')
+  console.log(allPosts)
   const posts = getFiles('blog')
   return {
-    paths: posts.map((p) => ({
+    paths: allPosts.map((p) => ({
       params: {
-        slug: formatSlug(p).split('/'),
+        slug: p.slug.split('/'),
       },
     })),
     fallback: false,

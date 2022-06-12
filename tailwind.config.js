@@ -15,6 +15,10 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
+      dropShadow: {
+        '3dlight': ['2px 2px 0 #000000', '0px 0px 1px #00000088'],
+        '3ddark': ['2px 2px 0 #000000', '0px 0px 1px #00000088'],
+      },
       spacing: {
         '9/16': '56.25%',
       },
@@ -25,10 +29,11 @@ module.exports = {
         14: '3.5rem',
       },
       fontFamily: {
-        sans: ['InterVariable', ...defaultTheme.fontFamily.sans],
+        sans: ['Roboto', ...defaultTheme.fontFamily.sans],
       },
       colors: {
-        primary: colors.teal,
+        primary: colors.lime,
+        secondary: colors.sky,
         gray: colors.neutral,
       },
       typography: (theme) => ({
