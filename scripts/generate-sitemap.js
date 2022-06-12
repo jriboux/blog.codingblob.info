@@ -11,7 +11,7 @@ const siteMetadata = require('../data/siteMetadata')
     'pages/*.tsx',
     'data/blog/**/*.mdx',
     'data/blog/**/*.md',
-    'public/tags/**/*.xml',
+    'public/tags_feeds/**/*.xml',
     '!pages/_*.js',
     '!pages/_*.tsx',
     '!pages/api',
@@ -41,6 +41,7 @@ const siteMetadata = require('../data/siteMetadata')
                   .replace('.tsx', '')
                   .replace('.mdx', '')
                   .replace('.md', '')
+                  .replace('tags_feeds', 'tags')
                   .replace('/feed.xml', '')
                 const route = path === '/index' ? '' : path
 
