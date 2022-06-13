@@ -55,7 +55,9 @@ const securityHeaders = [
 module.exports = withBundleAnalyzer({
   reactStrictMode: true,
   images: {
-    loader: 'custom',
+  //  loader: 'custom',
+    loader: 'imgix',
+    path: 'https://blog-codingblob.imgix.net',
   },
   pageExtensions: ['js', 'jsx', 'md', 'mdx'],
   eslint: {
