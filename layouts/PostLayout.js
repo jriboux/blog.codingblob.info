@@ -7,6 +7,7 @@ import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import Comments from '@/components/comments'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
+import FeaturedImage from '@/components/FeaturedImage'
 
 const editUrl = (fileName) => `${siteMetadata.siteRepo}/blob/master/data/blog/${fileName}`
 const discussUrl = (slug) =>
@@ -86,29 +87,16 @@ export default function PostLayout({ frontMatter, authorDetails, next, prev, chi
               </dd>
             </dl>
             <div className="divide-y divide-gray-200 dark:divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0">
-              <div className="prose max-w-none pt-10 pb-8 dark:prose-dark">
-                {featured_image && (
-                  <div
-                    className="rounded-t-md bg-center"
-                    style={{
-                      backgroundImage: `url(/static${featured_image})`,
-                      backgroundSize: '150%',
-                    }}
-                  >
-                    <div className="rounded-t-md backdrop-blur-3xl">
-                      <Image
-                        alt={title}
-                        src={`/static${featured_image}`}
-                        className="w-full object-contain object-center drop-shadow-[5px_10px_15px_rgba(0,0,0,0.5)]"
-                        width={762}
-                        height={326}
-                        layout="responsive"
-                      />
-                    </div>
-                  </div>
-                )}
-                {children}
+              <div className="pt-10">
+                <FeaturedImage
+                  title={title}
+                  featuredImage={featured_image}
+                  width={762}
+                  height={326}
+                  layout="responsive"
+                />
               </div>
+              <div className="prose max-w-none pt-10 pb-8 dark:prose-dark">{children}</div>
               <div className="pt-6 pb-6 text-sm text-gray-700 dark:text-gray-300">
                 <Link href={discussUrl(slug)} rel="nofollow">
                   {'Discuss on Twitter'}

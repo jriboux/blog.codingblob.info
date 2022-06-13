@@ -8,6 +8,7 @@ import Card from '@/components/Card'
 import Image from '@/components/Image'
 import PostPage from '../pages/blog/page/[page]'
 import PageTitle from '@/components/PageTitle'
+import FeaturedImage from '@/components/FeaturedImage'
 
 export default function ListLayout({
   posts,
@@ -37,28 +38,14 @@ export default function ListLayout({
         >
           <article className="flex h-full w-full flex-col items-stretch">
             <figure className="relative flex-grow">
-              {featured_image && (
-                <div
-                  className="rounded-t-md bg-center"
-                  style={{
-                    backgroundImage: `url(/static${featured_image})`,
-                    backgroundSize: '150%',
-                  }}
-                >
-                  <div className="rounded-t-md backdrop-blur-3xl">
-                    <Link href={`/blog/${slug}`}>
-                      <Image
-                        alt={title}
-                        src={`/static${featured_image}`}
-                        className="w-full object-contain object-center drop-shadow-[5px_10px_15px_rgba(0,0,0,0.5)]"
-                        width={544}
-                        height={306}
-                        layout="responsive"
-                      />
-                    </Link>
-                  </div>
-                </div>
-              )}
+              <FeaturedImage
+                title={title}
+                link={`/blog/${slug}`}
+                featuredImage={featured_image}
+                width={544}
+                height={306}
+                layout="responsive"
+              />
               <dl className="px-4 py-2">
                 <dt className="sr-only">Publié le</dt>
                 <dd className="text-base font-medium text-secondary-500 dark:text-secondary-400">
