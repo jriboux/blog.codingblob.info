@@ -57,7 +57,7 @@ module.exports = withBundleAnalyzer({
   images: {
   //  loader: 'custom',
     loader: 'imgix',
-    path: 'https://blog-codingblob.imgix.net/static/images/',
+    path: 'https://codingblob-blog.imgix.net/static/images/',
   },
   pageExtensions: ['js', 'jsx', 'md', 'mdx'],
   eslint: {
