@@ -26,7 +26,14 @@ jobs:
       with:
         node-version: '16.x'
         cache: 'npm'
-    - run: |
+    - name: Create .env file
+      run: |
+        echo NEXT_PUBLIC_GISCUS_CATEGORY="${{ secrets.NEXT_PUBLIC_GISCUS_CATEGORY }}" >> .env
+        echo NEXT_PUBLIC_GISCUS_CATEGORY_ID="${{ secrets.NEXT_PUBLIC_GISCUS_CATEGORY_ID }}" >> .env
+        echo NEXT_PUBLIC_GISCUS_REPO="${{ secrets.NEXT_PUBLIC_GISCUS_REPO }}" >> .env
+        echo NEXT_PUBLIC_GISCUS_REPOSITORY_ID="${{ secrets.NEXT_PUBLIC_GISCUS_REPOSITORY_ID }}" >> .env
+    - name: Export Static Website
+      run: |
         npm install
         npm run export
     - name: Deploy to Server
@@ -39,7 +46,3 @@ jobs:
           REMOTE_PORT: ${{ secrets.REMOTE_PORT }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           TARGET: ${{ secrets.REMOTE_TARGET }}
-          NEXT_PUBLIC_GISCUS_CATEGORY: ${{ secrets.NEXT_PUBLIC_GISCUS_CATEGORY }}
-          NEXT_PUBLIC_GISCUS_CATEGORY_ID: ${{ secrets.NEXT_PUBLIC_GISCUS_CATEGORY_ID }}
-          NEXT_PUBLIC_GISCUS_REPO: ${{ secrets.NEXT_PUBLIC_GISCUS_REPO }}
-          NEXT_PUBLIC_GISCUS_REPOSITORY_ID: ${{ secrets.NEXT_PUBLIC_GISCUS_REPOSITORY_ID }}
