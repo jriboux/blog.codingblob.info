@@ -88,13 +88,7 @@ export default function PostLayout({ frontMatter, authorDetails, next, prev, chi
             </dl>
             <div className="divide-y divide-gray-200 dark:divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0">
               <div className="pt-10">
-                <FeaturedImage
-                  title={title}
-                  featuredImage={featured_image}
-                  width={762}
-                  height={326}
-                  layout="responsive"
-                />
+                <FeaturedImage title={title} featuredImage={featured_image} sizes="320px" />
               </div>
               <div className="prose max-w-none pt-10 pb-8 dark:prose-dark">{children}</div>
               {/*<div className="pt-6 pb-6 text-sm text-gray-700 dark:text-gray-300">*/}

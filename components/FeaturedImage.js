@@ -7,22 +7,28 @@ const FeaturedImage = ({ featuredImage, title, link, className = '', ...rest }) 
     <Image
       alt={title}
       src={`/static${featuredImage}`}
-      className={`w-full scale-90 object-contain object-center drop-shadow-[5px_10px_15px_rgba(0,0,0,0.5)] ${className}`}
+      className={`w-full scale-90 drop-shadow-[5px_10px_15px_rgba(0,0,0,0.5)] ${className}`}
+      objectFit="contain"
+      objectPosition="center"
+      layout="fill"
       {...rest}
     />
   )
 
   return (
-    <div className="relative overflow-hidden rounded-t-md bg-center">
+    <div className="relative h-48 overflow-hidden rounded-t-md bg-center">
       <span className="absolute inset-0 block rounded-t-md">
         <Image
           alt=""
           src={`/static${featuredImage}`}
-          className="scale-[3] object-contain object-center"
+          className="scale-[3]"
+          objectFit="contain"
+          objectPosition="center"
+          layout="fill"
           {...rest}
         />
       </span>
-      <div className="backdrop-blur-3xl">
+      <div className="relative h-48 backdrop-blur-3xl">
         {link && <Link href={link}>{image}</Link>}
         {!link && image}
       </div>

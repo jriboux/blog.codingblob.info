@@ -42,9 +42,7 @@ export default function ListLayout({
                 title={title}
                 link={`/blog/${slug}`}
                 featuredImage={featured_image}
-                width={544}
-                height={306}
-                layout="responsive"
+                sizes="320px"
               />
               <dl className="px-4 py-2">
                 <dt className="sr-only">Publié le</dt>
